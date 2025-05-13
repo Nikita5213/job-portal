@@ -19,15 +19,34 @@
 	  </style>
 	</head>
 	<body>
-	<form action = "dashboard.jsp" method = "post">
+	
+	
+	<script>
+        //function redirectToPage() {
+            //var role = document.querySelector('input[name="role"]:checked');
+            //if (role) {
+                //if (role.value === "Employer") {
+                  //  window.location.href = "employer.jsp";
+                //} else if (role.value === "Applicant") {
+                //    window.location.href = "applicant.jsp";
+              //  }
+            //} else {
+          //      alert("Please select a role.");
+        //    }
+      //      return false; 
+    //    }
+    </script>
+    
+    
+	<form   action = "register" method = "post">
 	<h1 class = "header">Register</h1><br><br>
 	Name: <input type = "text" name = "Name"><br><br>
 	EmailId:  <input type = "email" name = "Email"><br><br>
 	Password: <input type = "password" name = "Password"><br><br>
 	
 	Role:
-	Employer <input type="radio"  name="role" >
-  	Applicant <input type="radio"  name="role" >
+	 <input type="radio"  name="Role" value = "Employer" >Employer
+  	 <input type="radio"  name="Role" value = "Applicant" >Applicant
   	<br><br>
 	<button type = "submit">Submit</button>
 	</form>

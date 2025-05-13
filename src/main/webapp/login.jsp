@@ -21,7 +21,8 @@
 	</style>
 </head>
 <body>
-	<form action = "dashboard.jsp" method = "post">
+
+   <form action = "dashboard.jsp" method = "post">
 	<h1 class = "header">Login</h1><br><br>
 	Email: <input type =  "email" name = "email"><br><br>
 	Password: <input type = "password" name = "name"><br><br>
