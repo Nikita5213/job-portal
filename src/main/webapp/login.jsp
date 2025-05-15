@@ -22,10 +22,10 @@
 </head>
 <body>
 
-   <form action = "dashboard.jsp" method = "post">
+   <form action = "login" method = "post">
 	<h1 class = "header">Login</h1><br><br>
 	Email: <input type =  "email" name = "email"><br><br>
-	Password: <input type = "password" name = "name"><br><br>
+	Password: <input type = "password" name = "password"><br><br>
 	<button type = "submit">Submit</button><br><br>
 	<span>Don't have account!</span>
 	<a href ="register.jsp">Register</a>
