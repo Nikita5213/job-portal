@@ -37,10 +37,10 @@ public class Userdao{
 		} 
     }
 	
-	public boolean loginUser(User u) throws SQLException{
+	public String loginUser(User u) throws SQLException{
 		
-		String sql = "Select * from users where email = ? and password = ?";
-		Connection conn;
+			String sql = "Select * from users where email = ? and password = ?";
+			Connection conn;
 		
 			conn = getConnection();
 			PreparedStatement stmt = conn.prepareStatement(sql);
@@ -48,12 +48,12 @@ public class Userdao{
 			stmt.setString(1,u.getEmail());
 			stmt.setString(2,u.getPassword());
 			ResultSet rs = stmt.executeQuery();
-			
 			if(rs.next()) {
-			   return true;
+				String role = rs.getString("role");
+			   return role;
 			}
 			else {
-				return false;
+				return null;
 			}
 		}
 }

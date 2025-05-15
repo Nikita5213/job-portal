@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet{
 	
 	
-	boolean b;
+	
 	Userdao userdao;
 	
 	public void init() {
@@ -26,13 +26,19 @@ public class LoginServlet extends HttpServlet{
 		
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
+		
 		User user = new User();
 		user.setEmail(request.getParameter("email"));
 		user.setPassword(request.getParameter("password"));
+		
 		try {
-			b = userdao.loginUser(user);
-			if(b== true)
-			response.sendRedirect("dashboard.jsp");
+			String role;
+			role = userdao.loginUser(user);
+			
+			if(role.equals("employer"))
+			response.sendRedirect("employer.jsp");
+			else if(role.equals("applicant"))
+			response.sendRedirect("applicant.jsp");
 			else {
 				out.println("<h1>Error occurred!</h1>");
 				out.println("<a href = \"login.jsp\"> Try again</a>");
