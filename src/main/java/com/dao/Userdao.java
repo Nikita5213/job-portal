@@ -6,7 +6,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.model.User;
+import com.model.Job;
 
 public class Userdao{
 
@@ -37,7 +41,7 @@ public class Userdao{
 		} 
     }
 	
-	public String loginUser(User u) throws SQLException{
+	public User loginUser(User u) throws SQLException{
 		
 			String sql = "Select * from users where email = ? and password = ?";
 			Connection conn;
@@ -48,12 +52,68 @@ public class Userdao{
 			stmt.setString(1,u.getEmail());
 			stmt.setString(2,u.getPassword());
 			ResultSet rs = stmt.executeQuery();
+			User loginuser = new User();
+			
 			if(rs.next()) {
-				String role = rs.getString("role");
-			   return role;
+				loginuser.setEmail(rs.getString("email"));
+				loginuser.setRole(rs.getString("role"));
+			   return loginuser;
 			}
 			else {
 				return null;
 			}
 		}
+	public int postJob(Job j) throws SQLException{
+			
+		String sql = "INSERT INTO jobs(title,description,location,postedBy,skill,years,salary) VALUES(?,?,?,?,?,?,?)";
+		Connection conn;
+		conn = getConnection();
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		
+		stmt.setString(1,j.getTitle());
+		stmt.setString(2,j.getDescription());
+		stmt.setString(3,j.getLocation());
+		stmt.setString(4,j.getPostedBy());
+		stmt.setString(5,j.getSkill());
+		stmt.setLong(6,j.getYears());
+		stmt.setLong(7,j.getSalary());
+		int rows = stmt.executeUpdate();
+		if(rows > 0)
+			return rows;
+		else 
+			return 0;
+		
+	}
+	public List<Job> getAllJobs(String Post) throws SQLException {
+		
+		List<Job> list = new ArrayList<>();
+		String sql = "SELECT * FROM jobs WHERE postedBy = ?";
+		Connection conn;
+		conn = getConnection();
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1,Post);
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()) {
+		Job j = new Job();
+		j.setTitle(rs.getString("title"));
+		j.setDescription(rs.getString("description"));
+		j.setLocation(rs.getString("location"));
+		j.setSkill(rs.getString("skill"));
+		j.setYears(rs.getInt("years"));
+		j.setSalary(rs.getInt("salary"));
+		System.out.println(j.getTitle());
+		System.out.println(j.getDescription());
+		System.out.println(j.getLocation());
+		System.out.println(j.getSkill());
+		System.out.println(j.getYears());
+		System.out.println(j.getSalary());
+		list.add(j);
+		}
+		return list;
+	}
+
+	
 }

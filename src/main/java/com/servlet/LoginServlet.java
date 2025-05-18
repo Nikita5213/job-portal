@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 public class LoginServlet extends HttpServlet{
 	
@@ -31,9 +32,14 @@ public class LoginServlet extends HttpServlet{
 		user.setEmail(request.getParameter("email"));
 		user.setPassword(request.getParameter("password"));
 		
+		
 		try {
-			String role;
-			role = userdao.loginUser(user);
+			User loginuser;
+			loginuser = userdao.loginUser(user);
+			String role = loginuser.getRole();
+			HttpSession session = request.getSession();
+			session.setAttribute("user",loginuser);
+
 			
 			if(role.equals("employer"))
 			response.sendRedirect("employer.jsp");
