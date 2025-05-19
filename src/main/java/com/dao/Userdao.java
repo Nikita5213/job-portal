@@ -114,6 +114,42 @@ public class Userdao{
 		}
 		return list;
 	}
+	
+	
+public List<Job> searchJobs(String search) throws SQLException {
+		
+		List<Job> list = new ArrayList<>();
+		String sql = "SELECT * FROM jobs WHERE title LIKE ? OR skill LIKE ? OR years LIKE ? OR location LIKE ? ";
+		Connection conn;
+		conn = getConnection();
+		
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%" + search + "%");
+        stmt.setString(2, "%" + search + "%");
+        stmt.setString(3, "%" + search + "%");
+        stmt.setString(4, "%" + search + "%");
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()) {
+			
+		Job j = new Job();
+		j.setTitle(rs.getString("title"));
+		j.setDescription(rs.getString("description"));
+		j.setLocation(rs.getString("location"));
+		j.setSkill(rs.getString("skill"));
+		j.setYears(rs.getInt("years"));
+		j.setSalary(rs.getInt("salary"));
+		System.out.println(j.getTitle());
+		System.out.println(j.getDescription());
+		System.out.println(j.getLocation());
+		System.out.println(j.getSkill());
+		System.out.println(j.getYears());
+		System.out.println(j.getSalary());
+		
+		list.add(j);
+		}
+		return list;
+	}
 
 	
 }

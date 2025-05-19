@@ -15,6 +15,7 @@ if(!role.equals("employer")){
 	<head>
 	</head>
 	<body>
+	
 	<a href = "view-my-list">ViewMyListingJob</a><br><br>
 	<a href = "post.jsp">Post Job</a><br><br>
 	<a href = "view-applicants.jsp">View Applicants</a><br><br>

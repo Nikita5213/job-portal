@@ -40,13 +40,13 @@
     
 	<form   action = "register" method = "post">
 	<h1 class = "header">Register</h1><br><br>
-	Name: <input type = "text" name = "Name"><br><br>
-	EmailId:  <input type = "email" name = "Email"><br><br>
-	Password: <input type = "password" name = "Password"><br><br>
+	Name: <input type = "text" name = "name"><br><br>
+	EmailId:  <input type = "email" name = "email"><br><br>
+	Password: <input type = "password" name = "password"><br><br>
 	
 	Role:
-	 <input type="radio"  name="Role" value = "Employer" >Employer
-  	 <input type="radio"  name="Role" value = "Applicant" >Applicant
+	 <input type="radio"  name="role" value = "employer" >Employer
+  	 <input type="radio"  name="role" value = "applicant" >Applicant
   	<br><br>
 	<button type = "submit">Submit</button>
 	</form>
