@@ -16,9 +16,8 @@ if(!role.equals("employer")){
 <head></head>
 <body>
 
-	<form  method = "post">
+	<form action = "profile" method = "post">
 	
-	Id:<input type = "number" name = "id"><br><br>
 	Name:<input type = "text" name = "name"><br><br>
 	Email:<input type = "email" name = "email"><br><br>
 	PhoneNo:<input type = "number" name = "phoneno"><br><br>
@@ -28,6 +27,6 @@ if(!role.equals("employer")){
 	Project:<input type = "text" name = "project"><br><br>
 	ResumeLink:<input type = "text" name = "resume"><br><br>
 	Certificates:<input type = "text" name = "certificates"><br><br>
-	
+			</form>
 </body>
 </html>

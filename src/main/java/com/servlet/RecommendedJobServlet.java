@@ -13,12 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.model.Job;
-import com.model.Search;
+import com.model.Profile;
 import com.model.User;
 
 
 
-public class SearchJobServlet extends HttpServlet{
+public class RecommendedJobServlet extends HttpServlet{
 	
 	Userdao userdao;
 	
@@ -29,29 +29,27 @@ public class SearchJobServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		try {
 			
-			Search search = new Search();
-			HttpSession session = request.getSession();
-			User u = (User)session.getAttribute("user");
-			int id = u.getId();
 			List<Job> list = new ArrayList<>();
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
+			String search = request.getParameter("search");
 			
-			search.setUser_id(id);
-			search.setTitle(request.getParameter("title"));
-			search.setSkills(request.getParameter("skills"));
-			search.setYears(Integer.parseInt(request.getParameter("years")));
-			search.setLocation(request.getParameter("location"));
-		
-			list = userdao.searchJobs(search);
+			
+			Profile profile = new Profile();
+			HttpSession session = request.getSession();
+			session.setAttribute("details",profile);
+
+			Profile p = (Profile)session.getAttribute("details");
+			
+			list = userdao.RecommendJobs(p.getSkills());
 			
 			out.println("<h1>Job List</h1>");
             out.println("<table border='1'>");
 			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th></tr>");
 			for (Job j : list) {
 	                out.println("<tr><td>" + j.getTitle() + "</td><td>" + j.getDescription() + "</td><td>"
-	                        + j.getLocation() + "</td><td>" + j.getSkill() + "</td><td>"+j.getYears() + "</td><td>"+j.getSalary()+ "</td><td>"+
-	                        "<a href = \"apply?job_id="+j.getId()+"\"><button value = \"submit\">Apply </button>"+"</a>"+"</td></tr>");
+	                        + j.getLocation() + "</td><td>" + j.getSkill() + "</td><td>"+j.getYears() + "</td><td>"+j.getSalary()+
+	                        "<button value = \"submit\">Apply </button>"+"</td></tr>");
 	            }
 	        out.println("</table>");
 		}		catch (Exception e) {

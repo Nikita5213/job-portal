@@ -10,7 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.model.User;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.model.Job;
+import com.model.Job_application;
+import com.model.Profile;
+import com.model.Search;
 
 public class Userdao{
 
@@ -49,12 +55,15 @@ public class Userdao{
 			conn = getConnection();
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			
+			
 			stmt.setString(1,u.getEmail());
 			stmt.setString(2,u.getPassword());
 			ResultSet rs = stmt.executeQuery();
 			User loginuser = new User();
 			
 			if(rs.next()) {
+		
+				loginuser.setId(rs.getInt("Id"));
 				loginuser.setEmail(rs.getString("email"));
 				loginuser.setRole(rs.getString("role"));
 			   return loginuser;
@@ -86,6 +95,7 @@ public class Userdao{
 		
 	}
 	public List<Job> getAllJobs(String Post) throws SQLException {
+
 		
 		List<Job> list = new ArrayList<>();
 		String sql = "SELECT * FROM jobs WHERE postedBy = ?";
@@ -104,52 +114,151 @@ public class Userdao{
 		j.setSkill(rs.getString("skill"));
 		j.setYears(rs.getInt("years"));
 		j.setSalary(rs.getInt("salary"));
-		System.out.println(j.getTitle());
-		System.out.println(j.getDescription());
-		System.out.println(j.getLocation());
-		System.out.println(j.getSkill());
-		System.out.println(j.getYears());
-		System.out.println(j.getSalary());
+	
 		list.add(j);
 		}
 		return list;
 	}
 	
 	
-public List<Job> searchJobs(String search) throws SQLException {
+public List<Job> searchJobs(Search search) throws SQLException {
+	
 		
 		List<Job> list = new ArrayList<>();
-		String sql = "SELECT * FROM jobs WHERE title LIKE ? OR skill LIKE ? OR years LIKE ? OR location LIKE ? ";
+		String sql = "SELECT * FROM jobs j LEFT JOIN job_applications ja on j.id = ja.job_id and ja.user_id = ?"
+				+ " WHERE (title LIKE ? OR skill LIKE ? OR years LIKE ? OR location LIKE ?) "
+				+ "AND status IS NULL";
+
 		Connection conn;
 		conn = getConnection();
 		
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, "%" + search + "%");
-        stmt.setString(2, "%" + search + "%");
-        stmt.setString(3, "%" + search + "%");
-        stmt.setString(4, "%" + search + "%");
+		stmt.setLong(1,search.getUser_id());
+		stmt.setString(2, "%" + search.getTitle() + "%");
+        stmt.setString(3, "%" + search.getSkills() + "%");
+        stmt.setString(4, "%" + search.getYears() + "%");
+        stmt.setString(5, "%" + search.getLocation() + "%");
 		ResultSet rs = stmt.executeQuery();
 		
 		while(rs.next()) {
 			
 		Job j = new Job();
+		j.setId(rs.getInt("id"));
 		j.setTitle(rs.getString("title"));
 		j.setDescription(rs.getString("description"));
 		j.setLocation(rs.getString("location"));
 		j.setSkill(rs.getString("skill"));
 		j.setYears(rs.getInt("years"));
 		j.setSalary(rs.getInt("salary"));
-		System.out.println(j.getTitle());
-		System.out.println(j.getDescription());
-		System.out.println(j.getLocation());
-		System.out.println(j.getSkill());
-		System.out.println(j.getYears());
-		System.out.println(j.getSalary());
 		
-		list.add(j);
+		list.add(j);	
 		}
 		return list;
 	}
 
+public Profile getAllDetails(String email) throws SQLException{
 	
+	String sql = "Select * from Profile where email = ? ";
+	Connection conn;
+
+	conn = getConnection();
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	
+	stmt.setString(1,email);
+
+	ResultSet rs = stmt.executeQuery();
+	Profile p = new Profile();
+	
+	if (rs.next()) {
+        
+        p.setName(rs.getString("name"));
+        p.setEmail(rs.getString("email"));
+        p.setPhoneno(rs.getInt("phoneno"));
+        p.setEducation(rs.getString("education"));
+        p.setExperience(rs.getInt("experience"));
+        p.setSkills(rs.getString("skills"));
+        p.setProject(rs.getString("project"));
+        p.setResumelink(rs.getString("resume"));
+        p.setCertificates(rs.getString("certificates"));
+        
+    }
+	
+	return p;
+}
+
+public List<Job> RecommendJobs(String skills) throws SQLException {
+
+	
+	List<Job> list = new ArrayList<>();
+	String sql = "SELECT * FROM jobs WHERE skills LIKE  = ?";
+	Connection conn;
+	conn = getConnection();
+	
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	stmt.setString(1,"%" + skills + "%");
+	ResultSet rs = stmt.executeQuery();
+	
+	while(rs.next()) {
+	Job j = new Job();
+	j.setTitle(rs.getString("title"));
+	j.setDescription(rs.getString("description"));
+	j.setLocation(rs.getString("location"));
+	j.setSkill(rs.getString("skill"));
+	j.setYears(rs.getInt("years"));
+	j.setSalary(rs.getInt("salary"));
+
+	list.add(j);
+	}
+	return list;
+}
+
+public int applyJobs(int user_id,int job_id) throws SQLException {
+	
+	Job_application j = new Job_application();
+	String sql = "INSERT INTO job_applications (job_id,user_id,status) VALUES (?,?,?)";
+	Connection conn;
+	conn = getConnection();
+	
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	
+	stmt.setLong(1,job_id);
+	stmt.setLong(2,user_id);
+	stmt.setString(3,"Applied");
+		int rows = stmt.executeUpdate();
+	if(rows>0) {
+		return rows;
+	}
+	else 
+		return 0;
+}
+
+public  List<Object>  My_Application(int id) throws SQLException{
+	
+	List<Object> list = new ArrayList<>();
+	String sql = "Select * from job_applications ja LEFT JOIN jobs j on ja.job_id = j.id WHERE user_id = ? ";
+	Connection conn;
+	conn = getConnection();
+	 
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	
+	stmt.setLong(1, id);
+	ResultSet rs = stmt.executeQuery();
+	
+	while(rs.next()) {
+		
+	Job_application ja = new Job_application();
+	Job j = new Job();
+	j.setTitle(rs.getString("title"));
+	j.setDescription(rs.getString("description"));
+	j.setLocation(rs.getString("location"));
+	j.setSkill(rs.getString("skill"));
+	j.setYears(rs.getInt("years"));
+	j.setSalary(rs.getInt("salary"));
+	ja.setStatus(rs.getString("status"));
+
+	list.add(j);
+	}
+	return list;
+	
+}
 }

@@ -35,7 +35,7 @@ public class JobListServlet extends HttpServlet{
 			list = userdao.getAllJobs(Post);
 			
 			out.println("<h1>Job List<table border = '1'></h1>");
-			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th></tr>");
+			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th><th>Salary</th></tr>");
 			for (Job j : list) {
 	                out.println("<tr><td>" + j.getTitle() + "</td><td>" + j.getDescription() + "</td><td>"
 	                        + j.getLocation() + "</td><td>" + j.getSkill() + "</td><td>"+j.getYears() + "</td><td>"+j.getSalary()+"</td><td>"+ "</td></tr>");

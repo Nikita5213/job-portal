@@ -13,12 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import com.model.Job;
-import com.model.Search;
+import com.model.Job_application;
 import com.model.User;
 
 
 
-public class SearchJobServlet extends HttpServlet{
+public class MyApplicationServlet extends HttpServlet{
 	
 	Userdao userdao;
 	
@@ -29,29 +29,23 @@ public class SearchJobServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		try {
 			
-			Search search = new Search();
+			Job_application ja = new Job_application();
 			HttpSession session = request.getSession();
 			User u = (User)session.getAttribute("user");
 			int id = u.getId();
-			List<Job> list = new ArrayList<>();
+			List<Object> list = new ArrayList<>();
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 			
-			search.setUser_id(id);
-			search.setTitle(request.getParameter("title"));
-			search.setSkills(request.getParameter("skills"));
-			search.setYears(Integer.parseInt(request.getParameter("years")));
-			search.setLocation(request.getParameter("location"));
-		
-			list = userdao.searchJobs(search);
+			list = (List<Object>) userdao.My_Application(id);
 			
 			out.println("<h1>Job List</h1>");
             out.println("<table border='1'>");
-			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th></tr>");
-			for (Job j : list) {
-	                out.println("<tr><td>" + j.getTitle() + "</td><td>" + j.getDescription() + "</td><td>"
-	                        + j.getLocation() + "</td><td>" + j.getSkill() + "</td><td>"+j.getYears() + "</td><td>"+j.getSalary()+ "</td><td>"+
-	                        "<a href = \"apply?job_id="+j.getId()+"\"><button value = \"submit\">Apply </button>"+"</a>"+"</td></tr>");
+			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th><th>Status</th></tr>");
+			for (Object j : list) {
+	                out.println("<tr><td>" + ((Job) j).getTitle() + "</td><td>" + ((Job) j).getDescription() + "</td><td>"
+	                        + ((Job) j).getLocation() + "</td><td>" + ((Job) j).getSkill() + "</td><td>"+((Job) j).getYears() + "</td><td>"+
+	                		((Job) j).getSalary()+"</td><td>"+ ja.getStatus() +"</td></tr>");
 	            }
 	        out.println("</table>");
 		}		catch (Exception e) {

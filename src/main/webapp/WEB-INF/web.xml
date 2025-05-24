@@ -45,4 +45,39 @@
   	<servlet-name>SearchJobServlet</servlet-name>
   	<url-pattern>/SearchJob</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<servlet-name>ProfileServlet</servlet-name>
+  	<servlet-class>com.servlet.ProfileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ProfileServlet</servlet-name>
+  	<url-pattern>/profile</url-pattern>
+  </servlet-mapping>
+   <servlet>
+  	<servlet-name>RecommendedJobServlet</servlet-name>
+  	<servlet-class>com.servlet.RecommendedJobServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>RecommendedJobServlet</servlet-name>
+  	<url-pattern>/recommend</url-pattern>
+  	</servlet-mapping>
+  	
+  	 <servlet>
+  	<servlet-name>ApplyJobServlet</servlet-name>
+  	<servlet-class>com.servlet.ApplyJobServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ApplyJobServlet</servlet-name>
+  	<url-pattern>/apply</url-pattern>
+  	</servlet-mapping>
+  	
+  	 <servlet>
+  	<servlet-name>MyApplicationServlet</servlet-name>
+  	<servlet-class>com.servlet.MyApplicationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>MyApplicationServlet</servlet-name>
+  	<url-pattern>/my-application</url-pattern>
+  	</servlet-mapping>
+  	
   </web-app>

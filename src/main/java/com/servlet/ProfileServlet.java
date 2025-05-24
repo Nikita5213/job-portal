@@ -12,11 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import com.model.Job;
+import com.model.Profile;
 import com.model.User;
 
 
 
-public class ApplyJobServlet extends HttpServlet{
+public class ProfileServlet extends HttpServlet{
 	
 	Userdao userdao;
 	
@@ -27,31 +29,22 @@ public class ApplyJobServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		try {
 			
-			System.out.println("hello");
-			User loginuser = new User();
-			
-			response.setContentType("text/html");
+			Profile p = new Profile();
 			PrintWriter out = response.getWriter();
-			
-			int job_id =(Integer.parseInt(request.getParameter("job_id")));
-			System.out.println(job_id);
-			
 			HttpSession session = request.getSession();
-		
 			User u = (User)session.getAttribute("user");
-			int user_id = u.getId();
 			
-			System.out.println(user_id);
-			int row = userdao.applyJobs(user_id,job_id);
+			String email = u.getEmail();
+			p = userdao.getAllDetails(email);
 			
-			if(row > 0) {
-				out.println("Apply Successfully");
-			}
-			else {
-				out.println("Not Applied");
-			}
+			out.println("<h1>Profile<table border = '1'></h1>");
+			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th></tr>");
 			
-	      
+	        out.println("<tr><td>" + p.getName() + "</td><td>" + p.getEmail() + "</td><td>" + p.getPhoneno() + "</td><td>" + p.getEducation() 
+	        + "</td><td>"+p.getExperience() + "</td><td>"+p.getSkills()+"</td><td>"+ p.getProject()+"</td><td>"+
+	        		p.getResumelink()+"</td><td>"+p.getCertificates() + "</td></tr>");
+	            
+	        out.println("</table>");
 		}		catch (Exception e) {
 
 			e.printStackTrace();

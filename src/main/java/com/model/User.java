@@ -1,10 +1,18 @@
 package com.model;
 public class User{
-	
+
+private int Id;
 private String name;
 private String email;
 private String password;
 private String role;
+
+public int getId() {
+	return Id;
+}
+public void setId(int Id) {
+	this.Id = Id;
+}
 public String getName() {
 	return name;
 }

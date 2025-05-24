@@ -17,8 +17,8 @@ if(!role.equals("applicant")){
 	</head>
 	<body>
 	<a href ="search.jsp" >Search</a><br><br>
-	<a href ="recommend.jsp" >Recommended Jobs</a><br><br>
-	<a href = "my-application.jsp">My Application</a><br><br>
+	<a href ="recommend" >Recommended Jobs</a><br><br>
+	<a href = "my-application">My Application</a><br><br>
 	<a href = "profile.jsp">Profile</a><br><br>
  </body>
 </html>
