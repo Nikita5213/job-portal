@@ -12,14 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import com.model.Job;
-import com.model.JobWithApplication;
-import com.model.Job_application;
+
 import com.model.User;
+import com.model.ViewApplication;
 
 
 
-public class MyApplicationServlet extends HttpServlet{
+public class ViewApplicationServlet extends HttpServlet{
 	
 	Userdao userdao;
 	
@@ -32,23 +31,26 @@ public class MyApplicationServlet extends HttpServlet{
 			
 			
 			HttpSession session = request.getSession();
-			User u = (User)session.getAttribute("user");
-			int id = u.getId();
-			List<JobWithApplication> list = new ArrayList<>();
+			List<ViewApplication> list = new ArrayList<>();
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
-			
-			list = userdao.My_Application(id);
+			User u = (User)session.getAttribute("user");
+
+			String Post = u.getEmail();
+			list = userdao.View_Application(Post);
 			
 			out.println("<h1>Job List</h1>");
             out.println("<table border='1'>");
-			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th><th>Status</th></tr>");
-			for (JobWithApplication jwa : list) {
-	                out.println("<tr><td>" + jwa.getJob().getTitle() + "</td><td>" + jwa.getJob().getDescription() + "</td><td>"
-	                        + jwa.getJob().getLocation() + "</td><td>" + jwa.getJob().getSkill() + "</td><td>"+jwa.getJob().getYears() + "</td><td>"+
-	                        jwa.getJob().getSalary()+"</td><td>"+ jwa.getApplication().getStatus() +"</td></tr>");
+			out.println("<tr><th>Name</th><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th></tr>");
+			for (ViewApplication va : list) {
+	                out.println("<tr><td>" +  va.getUser().getName() + "</td><td>" + va.getJob().getTitle() + "</td><td>" + va.getJob().getDescription()
+	                		+ "</td><td>"  + va.getJob().getLocation() + "</td><td>" + va.getJob().getSkill() + "</td><td>"+va.getJob().getYears() + "</td><td>"+
+	                        va.getJob().getSalary()+"</td><td><a href = \"profile.jsp\"><button value = \"submit\">View</button></td></tr>");
+	               
 	            }
-	        out.println("</table>");
+			
+	        out.println("</table><br>");
+	       
 		}		catch (Exception e) {
 
 			e.printStackTrace();

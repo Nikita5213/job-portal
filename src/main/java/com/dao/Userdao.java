@@ -10,10 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.model.User;
+import com.model.ViewApplication;
 
 import jakarta.servlet.http.HttpSession;
 
 import com.model.Job;
+import com.model.JobWithApplication;
 import com.model.Job_application;
 import com.model.Profile;
 import com.model.Search;
@@ -62,7 +64,7 @@ public class Userdao{
 			User loginuser = new User();
 			
 			if(rs.next()) {
-		
+				loginuser.setName(rs.getString("name"));
 				loginuser.setId(rs.getInt("Id"));
 				loginuser.setEmail(rs.getString("email"));
 				loginuser.setRole(rs.getString("role"));
@@ -232,33 +234,61 @@ public int applyJobs(int user_id,int job_id) throws SQLException {
 		return 0;
 }
 
-public  List<Object>  My_Application(int id) throws SQLException{
-	
-	List<Object> list = new ArrayList<>();
-	String sql = "Select * from job_applications ja LEFT JOIN jobs j on ja.job_id = j.id WHERE user_id = ? ";
-	Connection conn;
-	conn = getConnection();
-	 
-	PreparedStatement stmt = conn.prepareStatement(sql);
-	
-	stmt.setLong(1, id);
-	ResultSet rs = stmt.executeQuery();
-	
-	while(rs.next()) {
-		
-	Job_application ja = new Job_application();
-	Job j = new Job();
-	j.setTitle(rs.getString("title"));
-	j.setDescription(rs.getString("description"));
-	j.setLocation(rs.getString("location"));
-	j.setSkill(rs.getString("skill"));
-	j.setYears(rs.getInt("years"));
-	j.setSalary(rs.getInt("salary"));
-	ja.setStatus(rs.getString("status"));
+public List<JobWithApplication> My_Application(int id) throws SQLException {
+    List<JobWithApplication> list = new ArrayList<>();
+    String sql = "SELECT * FROM job_applications ja LEFT JOIN jobs j ON ja.job_id = j.id WHERE user_id = ?";
+    
+    try (Connection conn = getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-	list.add(j);
-	}
-	return list;
-	
+        stmt.setLong(1, id);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            Job_application ja = new Job_application();
+            ja.setStatus(rs.getString("status"));
+      
+
+            Job j = new Job();
+            j.setTitle(rs.getString("title"));
+            j.setDescription(rs.getString("description"));
+            j.setLocation(rs.getString("location"));
+            j.setSkill(rs.getString("skill"));
+            j.setYears(rs.getInt("years"));
+            j.setSalary(rs.getInt("salary"));
+
+            list.add(new JobWithApplication(j, ja));
+        }
+    }
+    return list;
+}
+
+public List<ViewApplication> View_Application(String post) throws SQLException {
+    List<ViewApplication> list = new ArrayList<>();
+    
+    String sql = "Select j.title,j.skill,j.years,j.salary,j.description,j.location,u.name from jobs j "
+    		+ "JOIN job_applications ja on ja.job_id = j.id JOIN users u on ja.user_id = u.id where postedBy = ?;";
+    
+    try (Connection conn = getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setString(1, post);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+        	User u = new User();
+        	u.setName(rs.getString("name"));
+            Job j = new Job();
+            j.setTitle(rs.getString("title"));
+            j.setDescription(rs.getString("description"));
+            j.setLocation(rs.getString("location"));
+            j.setSkill(rs.getString("skill"));
+            j.setYears(rs.getInt("years"));
+            j.setSalary(rs.getInt("salary"));
+
+            list.add(new ViewApplication(u, j));
+        }
+    }
+    return list;
 }
 }

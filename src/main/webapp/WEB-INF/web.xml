@@ -80,4 +80,13 @@
   	<url-pattern>/my-application</url-pattern>
   	</servlet-mapping>
   	
+  	<servlet>
+  	<servlet-name>ViewApplicationServlet</servlet-name>
+  	<servlet-class>com.servlet.ViewApplicationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>ViewApplicationServlet</servlet-name>
+  	<url-pattern>/view-applicants</url-pattern>
+  	</servlet-mapping>
+  	
   </web-app>
