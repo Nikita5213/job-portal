@@ -158,62 +158,6 @@ public List<Job> searchJobs(Search search) throws SQLException {
 		return list;
 	}
 
-public Profile getAllDetails(String email) throws SQLException{
-	
-	String sql = "Select * from Profile where email = ? ";
-	Connection conn;
-
-	conn = getConnection();
-	PreparedStatement stmt = conn.prepareStatement(sql);
-	
-	stmt.setString(1,email);
-
-	ResultSet rs = stmt.executeQuery();
-	Profile p = new Profile();
-	
-	if (rs.next()) {
-        
-        p.setName(rs.getString("name"));
-        p.setEmail(rs.getString("email"));
-        p.setPhoneno(rs.getInt("phoneno"));
-        p.setEducation(rs.getString("education"));
-        p.setExperience(rs.getInt("experience"));
-        p.setSkills(rs.getString("skills"));
-        p.setProject(rs.getString("project"));
-        p.setResumelink(rs.getString("resume"));
-        p.setCertificates(rs.getString("certificates"));
-        
-    }
-	
-	return p;
-}
-
-public List<Job> RecommendJobs(String skills) throws SQLException {
-
-	
-	List<Job> list = new ArrayList<>();
-	String sql = "SELECT * FROM jobs WHERE skills LIKE  = ?";
-	Connection conn;
-	conn = getConnection();
-	
-	PreparedStatement stmt = conn.prepareStatement(sql);
-	stmt.setString(1,"%" + skills + "%");
-	ResultSet rs = stmt.executeQuery();
-	
-	while(rs.next()) {
-	Job j = new Job();
-	j.setTitle(rs.getString("title"));
-	j.setDescription(rs.getString("description"));
-	j.setLocation(rs.getString("location"));
-	j.setSkill(rs.getString("skill"));
-	j.setYears(rs.getInt("years"));
-	j.setSalary(rs.getInt("salary"));
-
-	list.add(j);
-	}
-	return list;
-}
-
 public int applyJobs(int user_id,int job_id) throws SQLException {
 	
 	Job_application j = new Job_application();
@@ -290,5 +234,97 @@ public List<ViewApplication> View_Application(String post) throws SQLException {
         }
     }
     return list;
+}
+public void insertAllDetails(Profile p) throws SQLException{
+	
+	String sql = "Insert into profile (name,email,phoneno,education,experience,skills,project)values(?,?,?,?,?,?,?)";
+	Connection conn;
+
+	conn = getConnection();
+	PreparedStatement stmt = conn.prepareStatement(sql);
+
+	stmt.setString(1,p.getName());
+	stmt.setString(2,p.getEmail());
+	stmt.setLong(3,p.getPhoneno());
+	stmt.setString(4,p.getEducation());
+	stmt.setLong(5,p.getExperience());
+	stmt.setString(6,p.getSkills());
+	stmt.setString(7,p.getProject());
+	stmt.executeUpdate();
+	
+}
+public Profile getAllDetails(String email) throws SQLException{
+	
+	String sql = "Select * from profile where email = ? ";
+	Connection conn;
+
+	conn = getConnection();
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	
+	stmt.setString(1,email);
+
+	ResultSet rs = stmt.executeQuery();
+	Profile p = new Profile();
+	
+	
+	if (rs.next()) {
+        
+        p.setName(rs.getString("name"));
+        p.setEmail(rs.getString("email"));
+        p.setPhoneno(rs.getInt("phoneno"));
+        p.setEducation(rs.getString("education"));
+        p.setExperience(rs.getInt("experience"));
+        p.setSkills(rs.getString("skills"));
+        p.setProject(rs.getString("project"));
+       // p.setResumeFile( rs.getBinaryStream("resumefile"));
+        return p;
+      }
+	return null;
+}
+
+public List<Job> RecommendJobs(String skills) throws SQLException {
+
+	
+	List<Job> list = new ArrayList<>();
+	String sql = "SELECT * FROM jobs WHERE skills LIKE  = ?";
+	Connection conn;
+	conn = getConnection();
+	
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	stmt.setString(1,"%" + skills + "%");
+	ResultSet rs = stmt.executeQuery();
+	
+	while(rs.next()) {
+	Job j = new Job();
+	j.setTitle(rs.getString("title"));
+	j.setDescription(rs.getString("description"));
+	j.setLocation(rs.getString("location"));
+	j.setSkill(rs.getString("skill"));
+	j.setYears(rs.getInt("years"));
+	j.setSalary(rs.getInt("salary"));
+
+	list.add(j);
+	}
+	return list;
+}
+
+public void updateAllDetails(Profile p)throws SQLException {
+	
+	
+	
+    String sql = "UPDATE profile SET name = ?,phoneno = ?,education = ?,experience = ?,skills = ?,project = ? WHERE email = ?";
+    Connection conn;
+
+	conn = getConnection();
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	
+	stmt.setString(1, p.getName());
+	stmt.setLong(2,p.getPhoneno());
+	stmt.setString(3,p.getEducation());
+	stmt.setLong(4,p.getExperience());
+	stmt.setString(5,p.getSkills());
+	stmt.setString(6,p.getProject());
+	stmt.setString(7,p.getEmail());
+	stmt.executeUpdate();
 }
 }

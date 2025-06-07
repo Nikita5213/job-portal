@@ -1,11 +1,14 @@
 package com.model;
 
+import java.io.InputStream;
+
 public class Profile{
 	
 	String name,email;
 	int phoneno,experience;
-	String education,skills,project;
-	String resumelink,certificates;
+	String education,skills,project,certificates;
+	//InputStream resumeFile;
+	
 	public String getName() {
 		return name;
 	}
@@ -48,17 +51,13 @@ public class Profile{
 	public void setProject(String project) {
 		this.project = project;
 	}
-	public String getResumelink() {
-		return resumelink;
-	}
-	public void setResumelink(String resumelink) {
-		this.resumelink = resumelink;
-	}
-	public String getCertificates() {
-		return certificates;
-	}
-	public void setCertificates(String certificates) {
-		this.certificates = certificates;
-	}
-		
+
+//    public InputStream getResumeFile() {
+//        return resumeFile;
+//    }
+//    public void setResumeFile(InputStream resumeFile) {
+//        this.resumeFile = resumeFile;
+//    }
 }
+	
+		
