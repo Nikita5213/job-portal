@@ -4,17 +4,11 @@ import java.io.InputStream;
 
 public class Profile{
 	
-	String name,email;
+	String email;
 	int phoneno,experience;
 	String education,skills,project,certificates;
 	//InputStream resumeFile;
 	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
 	public String getEmail() {
 		return email;
 	}

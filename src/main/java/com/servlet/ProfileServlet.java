@@ -36,11 +36,12 @@ public class ProfileServlet extends HttpServlet{
 			Profile p = new Profile();
 			HttpSession session = request.getSession();
 			User u = (User)session.getAttribute("user");
+			User u1 = new User();
 			
 			String email = u.getEmail();
 			p1 = userdao.getAllDetails(email);
 			
-			p.setName(request.getParameter("name"));
+			
 			p.setEmail(request.getParameter("email"));
 			p.setPhoneno((Integer.parseInt(request.getParameter("phoneno"))));
 			p.setEducation(request.getParameter("education"));
@@ -48,12 +49,18 @@ public class ProfileServlet extends HttpServlet{
 			p.setSkills(request.getParameter("skills"));
 			p.setProject(request.getParameter("project"));
 			
+			u1.setName(request.getParameter("name"));
+			u1.setEmail(request.getParameter("email"));
+			
 			if(p1 == null) {
 				userdao.insertAllDetails(p);
 				}
 				else {
 				userdao.updateAllDetails(p);
 				}	
+			userdao.updateName(u1);
+			u.setName(request.getParameter("name"));
+			session.setAttribute("user",u);
 			
 		    //Part filePart = request.getPart("resumefile");
 		    //InputStream fileInputStream = filePart.getInputStream();
@@ -76,18 +83,18 @@ public class ProfileServlet extends HttpServlet{
 			PrintWriter out = response.getWriter();
 			HttpSession session = request.getSession();
 			User u = (User)session.getAttribute("user");
-			
+			String name = u.getName();
 			String email = u.getEmail();
 			p = userdao.getAllDetails(email);
 		      
 	        out.println("<form action=\"profile\" method=\"post\">");
-	        out.println("Name: <input type = \"text\" name = \"name\"  value = " +(p== null ? " ": p.getName())+"><br><br>");
-	        out.println("Email: <input type = \"email\" name = \"email\" disabled value = " +email+"><br><br>");
-	        out.println("PhoneNo: <input type = \"number\" name = \"phoneno\" value = "+(p == null ? " " : p.getPhoneno())+"><br><br>");
-	        out.println("Education: <input type = \"text\" name = \"education\" value=  "+(p == null ? " " : p.getEducation())+"><br><br>");
-	        out.println("Experience: <input type = \"text\" name = \"experience\" value=  "+(p == null? " " :p.getExperience())+"><br><br>");
-	        out.println("Skills: <input type = \"text\" name = \"skills\" value=  "+(p == null ? " " : p.getSkills())+"><br><br>");
-	        out.println("Project: <input type = \"text\" name = \"project\" value=  "+(p == null ? " " : p.getProject())+"><br><br>");
+	        out.println("Name: <input type = \"text\" name = \"name\"  value = \"" +name+ "\"><br><br>");
+	        out.println("Email: <input type = \"email\" name = \"email\" readonly value = \"" +email+"\"><br><br>");
+	        out.println("PhoneNo: <input type = \"number\" name = \"phoneno\" value = \""+(p == null ? " " : p.getPhoneno())+"\"><br><br>");
+	        out.println("Education: <input type = \"text\" name = \"education\" value=  \""+(p == null ? " " : p.getEducation())+"\"><br><br>");
+	        out.println("Experience: <input type = \"text\" name = \"experience\" value= \""+(p == null? " " :p.getExperience())+"\"><br><br>");
+	        out.println("Skills: <input type = \"text\" name = \"skills\" value=  \""+(p == null ? " " : p.getSkills())+"\"><br><br>");
+	        out.println("Project: <input type = \"text\" name = \"project\" value=  \""+(p == null ? " " : p.getProject())+"\"><br><br>");
 	        out.println("<button value = \"submit\">Submit</button>");
 		    out.println("</form>");
 		    

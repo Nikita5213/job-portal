@@ -237,19 +237,19 @@ public List<ViewApplication> View_Application(String post) throws SQLException {
 }
 public void insertAllDetails(Profile p) throws SQLException{
 	
-	String sql = "Insert into profile (name,email,phoneno,education,experience,skills,project)values(?,?,?,?,?,?,?)";
+	String sql = "Insert into profile (email,phoneno,education,experience,skills,project)values(?,?,?,?,?,?)";
 	Connection conn;
 
 	conn = getConnection();
 	PreparedStatement stmt = conn.prepareStatement(sql);
 
-	stmt.setString(1,p.getName());
-	stmt.setString(2,p.getEmail());
-	stmt.setLong(3,p.getPhoneno());
-	stmt.setString(4,p.getEducation());
-	stmt.setLong(5,p.getExperience());
-	stmt.setString(6,p.getSkills());
-	stmt.setString(7,p.getProject());
+	
+	stmt.setString(1,p.getEmail());
+	stmt.setLong(2,p.getPhoneno());
+	stmt.setString(3,p.getEducation());
+	stmt.setLong(4,p.getExperience());
+	stmt.setString(5,p.getSkills());
+	stmt.setString(6,p.getProject());
 	stmt.executeUpdate();
 	
 }
@@ -269,7 +269,7 @@ public Profile getAllDetails(String email) throws SQLException{
 	
 	if (rs.next()) {
         
-        p.setName(rs.getString("name"));
+        
         p.setEmail(rs.getString("email"));
         p.setPhoneno(rs.getInt("phoneno"));
         p.setEducation(rs.getString("education"));
@@ -312,19 +312,32 @@ public void updateAllDetails(Profile p)throws SQLException {
 	
 	
 	
-    String sql = "UPDATE profile SET name = ?,phoneno = ?,education = ?,experience = ?,skills = ?,project = ? WHERE email = ?";
+    String sql = "UPDATE profile SET phoneno = ?,education = ?,experience = ?,skills = ?,project = ? WHERE email = ?";
     Connection conn;
 
 	conn = getConnection();
 	PreparedStatement stmt = conn.prepareStatement(sql);
 	
-	stmt.setString(1, p.getName());
-	stmt.setLong(2,p.getPhoneno());
-	stmt.setString(3,p.getEducation());
-	stmt.setLong(4,p.getExperience());
-	stmt.setString(5,p.getSkills());
-	stmt.setString(6,p.getProject());
-	stmt.setString(7,p.getEmail());
+	
+	stmt.setLong(1,p.getPhoneno());
+	stmt.setString(2,p.getEducation());
+	stmt.setLong(3,p.getExperience());
+	stmt.setString(4,p.getSkills());
+	stmt.setString(5,p.getProject());
+	stmt.setString(6,p.getEmail());
+	stmt.executeUpdate();
+}
+public void updateName(User u) throws SQLException {
+	
+	
+	String sql = "UPDATE users SET name = ? WHERE email = ?";
+	Connection conn;
+
+	conn = getConnection();
+	PreparedStatement stmt = conn.prepareStatement(sql);
+	
+	stmt.setString(1,u.getName());
+	stmt.setString(2,u.getEmail());
 	stmt.executeUpdate();
 }
 }

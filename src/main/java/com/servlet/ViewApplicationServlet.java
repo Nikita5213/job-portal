@@ -55,6 +55,7 @@ public class ViewApplicationServlet extends HttpServlet{
 			e.printStackTrace();
 		}
 	}
+}
 	
 	
 	
