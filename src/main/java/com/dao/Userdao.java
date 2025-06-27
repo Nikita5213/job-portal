@@ -210,7 +210,7 @@ public List<JobWithApplication> My_Application(int id) throws SQLException {
 public List<ViewApplication> View_Application(String post) throws SQLException {
     List<ViewApplication> list = new ArrayList<>();
     
-    String sql = "Select j.title,j.skill,j.years,j.salary,j.description,j.location,u.name from jobs j "
+    String sql = "Select j.title,j.skill,j.years,j.salary,j.description,j.location,u.name,u.email from jobs j "
     		+ "JOIN job_applications ja on ja.job_id = j.id JOIN users u on ja.user_id = u.id where postedBy = ?;";
     
     try (Connection conn = getConnection();
@@ -222,6 +222,7 @@ public List<ViewApplication> View_Application(String post) throws SQLException {
         while (rs.next()) {
         	User u = new User();
         	u.setName(rs.getString("name"));
+        	u.setEmail(rs.getString("email"));
             Job j = new Job();
             j.setTitle(rs.getString("title"));
             j.setDescription(rs.getString("description"));
@@ -237,7 +238,7 @@ public List<ViewApplication> View_Application(String post) throws SQLException {
 }
 public void insertAllDetails(Profile p) throws SQLException{
 	
-	String sql = "Insert into profile (email,phoneno,education,experience,skills,project)values(?,?,?,?,?,?)";
+	String sql = "Insert into profile (email,phoneno,education,experience,skills,project,resumeFile)values(?,?,?,?,?,?,?)";
 	Connection conn;
 
 	conn = getConnection();
@@ -250,6 +251,7 @@ public void insertAllDetails(Profile p) throws SQLException{
 	stmt.setLong(4,p.getExperience());
 	stmt.setString(5,p.getSkills());
 	stmt.setString(6,p.getProject());
+	stmt.setBinaryStream(7, p.getResumeFile());
 	stmt.executeUpdate();
 	
 }
@@ -276,26 +278,29 @@ public Profile getAllDetails(String email) throws SQLException{
         p.setExperience(rs.getInt("experience"));
         p.setSkills(rs.getString("skills"));
         p.setProject(rs.getString("project"));
-       // p.setResumeFile( rs.getBinaryStream("resumefile"));
+       p.setResumeFile( rs.getBinaryStream("resumeFile"));
         return p;
       }
 	return null;
 }
 
-public List<Job> RecommendJobs(String skills) throws SQLException {
+public List<Job> recommendJobs(int id ,String skills) throws SQLException {
 
 	
 	List<Job> list = new ArrayList<>();
-	String sql = "SELECT * FROM jobs WHERE skills LIKE  = ?";
+	String sql =" SELECT * FROM jobs j LEFT JOIN job_applications ja on ja.job_id = j.id AND ja.user_id = ? WHERE skill LIKE ? AND status is null";
+
 	Connection conn;
 	conn = getConnection();
 	
 	PreparedStatement stmt = conn.prepareStatement(sql);
-	stmt.setString(1,"%" + skills + "%");
+	stmt.setLong(1,id);
+	stmt.setString(2,skills);
 	ResultSet rs = stmt.executeQuery();
 	
 	while(rs.next()) {
 	Job j = new Job();
+	j.setId(rs.getInt("id"));
 	j.setTitle(rs.getString("title"));
 	j.setDescription(rs.getString("description"));
 	j.setLocation(rs.getString("location"));
@@ -312,7 +317,8 @@ public void updateAllDetails(Profile p)throws SQLException {
 	
 	
 	
-    String sql = "UPDATE profile SET phoneno = ?,education = ?,experience = ?,skills = ?,project = ? WHERE email = ?";
+    String sql = "UPDATE profile SET phoneno = ?,education = ?,experience = ?,skills = ?,project = ?" + 
+    		(!(p.getResumeFile() == null) ? ",resumeFile = ?":" ")+ " WHERE email = ?";
     Connection conn;
 
 	conn = getConnection();
@@ -324,7 +330,10 @@ public void updateAllDetails(Profile p)throws SQLException {
 	stmt.setLong(3,p.getExperience());
 	stmt.setString(4,p.getSkills());
 	stmt.setString(5,p.getProject());
-	stmt.setString(6,p.getEmail());
+	if( !(p.getResumeFile() == null)) {
+	stmt.setBinaryStream(6, p.getResumeFile());
+	}
+	stmt.setString(!(p.getResumeFile() == null)?7:6,p.getEmail());
 	stmt.executeUpdate();
 }
 public void updateName(User u) throws SQLException {

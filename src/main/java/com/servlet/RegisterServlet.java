@@ -24,7 +24,7 @@ public class RegisterServlet extends HttpServlet{
 			user.setPassword(request.getParameter("password"));
 			user.setRole(request.getParameter("role"));
 			userdao.registerUser(user);
-			response.sendRedirect("dashboard.jsp");
+			response.sendRedirect("login.jsp");
 		}
 		catch (Exception e) {
 			e.printStackTrace();

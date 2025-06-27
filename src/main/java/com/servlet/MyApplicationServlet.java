@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,15 +41,19 @@ public class MyApplicationServlet extends HttpServlet{
 			
 			list = userdao.My_Application(id);
 			
-			out.println("<h1>Job List</h1>");
-            out.println("<table border='1'>");
-			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th><th>Status</th></tr>");
-			for (JobWithApplication jwa : list) {
-	                out.println("<tr><td>" + jwa.getJob().getTitle() + "</td><td>" + jwa.getJob().getDescription() + "</td><td>"
-	                        + jwa.getJob().getLocation() + "</td><td>" + jwa.getJob().getSkill() + "</td><td>"+jwa.getJob().getYears() + "</td><td>"+
-	                        jwa.getJob().getSalary()+"</td><td>"+ jwa.getApplication().getStatus() +"</td></tr>");
-	            }
-	        out.println("</table>");
+//			out.println("<h1>Job List</h1>");
+//            out.println("<table border='1'>");
+//			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th><th>Status</th></tr>");
+//			for (JobWithApplication jwa : list) {
+//	                out.println("<tr><td>" + jwa.getJob().getTitle() + "</td><td>" + jwa.getJob().getDescription() + "</td><td>"
+//	                        + jwa.getJob().getLocation() + "</td><td>" + jwa.getJob().getSkill() + "</td><td>"+jwa.getJob().getYears() + "</td><td>"+
+//	                        jwa.getJob().getSalary()+"</td><td>"+ jwa.getApplication().getStatus() +"</td></tr>");
+//	            }
+//	        out.println("</table>");
+
+			request.setAttribute("myapplication", list); // pass data
+			RequestDispatcher rd = request.getRequestDispatcher("myapplication.jsp");
+			rd.forward(request, response);
 		}		catch (Exception e) {
 
 			e.printStackTrace();

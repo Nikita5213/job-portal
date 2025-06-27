@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,16 +40,20 @@ public class ViewApplicationServlet extends HttpServlet{
 			String Post = u.getEmail();
 			list = userdao.View_Application(Post);
 			
-			out.println("<h1>Job List</h1>");
-            out.println("<table border='1'>");
-			out.println("<tr><th>Name</th><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th></tr>");
-			for (ViewApplication va : list) {
-	                out.println("<tr><td>" +  va.getUser().getName() + "</td><td>" + va.getJob().getTitle() + "</td><td>" + va.getJob().getDescription()
-	                		+ "</td><td>"  + va.getJob().getLocation() + "</td><td>" + va.getJob().getSkill() + "</td><td>"+va.getJob().getYears() + "</td><td>"+
-	                        va.getJob().getSalary()+"</td><td><a href = \"profile.jsp\"><button value = \"submit\">View</button></td></tr>");
-	               }
-			
-	        out.println("</table><br>");
+//			out.println("<h1>Job List</h1>");
+//            out.println("<table border='1'>");
+//			out.println("<tr><th>Name</th><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th></tr>");
+//			for (ViewApplication va : list) {
+//	                out.println("<tr><td>" +  va.getUser().getName() + "</td><td>" + va.getJob().getTitle() + "</td><td>" + va.getJob().getDescription()
+//	                		+ "</td><td>"  + va.getJob().getLocation() + "</td><td>" + va.getJob().getSkill() + "</td><td>"+va.getJob().getYears() + "</td><td>"+
+//	                        va.getJob().getSalary()+"</td><td><a href = \"applicant?email="+va.getUser().getEmail()+"\"><button value = \"submit\">View</button></td></tr>");
+//	               }
+//			
+//	        out.println("</table><br>");
+			request.setAttribute("viewList", list); // pass data
+			RequestDispatcher rd = request.getRequestDispatcher("viewapplicants.jsp");
+			rd.forward(request, response);
+
 	       
 		}		catch (Exception e) {
 

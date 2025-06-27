@@ -7,7 +7,7 @@ public class Profile{
 	String email;
 	int phoneno,experience;
 	String education,skills,project,certificates;
-	//InputStream resumeFile;
+	InputStream resumeFile;
 	
 	public String getEmail() {
 		return email;
@@ -46,12 +46,12 @@ public class Profile{
 		this.project = project;
 	}
 
-//    public InputStream getResumeFile() {
-//        return resumeFile;
-//    }
-//    public void setResumeFile(InputStream resumeFile) {
-//        this.resumeFile = resumeFile;
-//    }
+    public InputStream getResumeFile() {
+        return resumeFile;
+    }
+    public void setResumeFile(InputStream resumeFile) {
+        this.resumeFile = resumeFile;
+    }
 }
 	
 		

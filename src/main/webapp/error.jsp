@@ -1,3 +1,4 @@
+<%@ include file="header.jsp" %>
 <html>
 <head></head>
 <body>

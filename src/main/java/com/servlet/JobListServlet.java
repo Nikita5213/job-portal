@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,14 +34,26 @@ public class JobListServlet extends HttpServlet{
 			
 			String Post = u.getEmail();
 			list = userdao.getAllJobs(Post);
+		    
+//			out.println("<html><head>");
+//			out.println("<link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">");
+//			out.println("<script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js\"></script>");
+//			out.println("</head><body>");
+//		    out.println("<div class='container mt-5'>");
+//			out.println("<h1>Job List<table border = '1'></h1>");
+//			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th></tr>");
+//			for (Job j : list) {
+//	                out.println("<tr><td>" + j.getTitle() + "</td><td>" + j.getDescription() + "</td><td>"
+//	                        + j.getLocation() + "</td><td>" + j.getSkill() + "</td><td>"+j.getYears() + "</td><td>"+j.getSalary()+ "</td></tr>");
+//	            }
+//	        out.println("</table>");
+//	        out.println("</div>");
+//	        out.println("</body></html>");
 			
-			out.println("<h1>Job List<table border = '1'></h1>");
-			out.println("<tr><th>Title</th><th>Description</th><th>Location</th><th>Skill</th><th>Years</th><th>Salary</th><th>Salary</th></tr>");
-			for (Job j : list) {
-	                out.println("<tr><td>" + j.getTitle() + "</td><td>" + j.getDescription() + "</td><td>"
-	                        + j.getLocation() + "</td><td>" + j.getSkill() + "</td><td>"+j.getYears() + "</td><td>"+j.getSalary()+"</td><td>"+ "</td></tr>");
-	            }
-	        out.println("</table>");
+			request.setAttribute("jobList", list); // pass data
+			RequestDispatcher rd = request.getRequestDispatcher("job-list.jsp");
+			rd.forward(request, response);
+
 		}		catch (Exception e) {
 
 			e.printStackTrace();

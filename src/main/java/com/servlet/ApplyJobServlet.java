@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class ApplyJobServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		try {
 			
-			System.out.println("hello");
+			
 			User loginuser = new User();
 			
 			response.setContentType("text/html");
@@ -45,14 +46,18 @@ public class ApplyJobServlet extends HttpServlet{
 			int row = userdao.applyJobs(user_id,job_id);
 			
 			if(row > 0) {
-				out.println("Apply Successfully");
+				
+				RequestDispatcher rd = request.getRequestDispatcher("applied.jsp");
+				rd.forward(request, response);
+
+				//out.println("<p>Applied Successfully</p>");
 			}
+			
 			else {
 				out.println("Not Applied");
 			}
 			
-	      
-		}		catch (Exception e) {
+		 }		catch (Exception e) {
 
 			e.printStackTrace();
 		}
